@@ -1,0 +1,49 @@
+{
+  "name": "tracepilot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered incident investigation engine built with TypeScript, PostgreSQL, OpenAI and MCP.",
+  "type": "module",
+  "engines": { "node": ">=24 <25" },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:smoke": "TRACEPILOT_LIVE_SMOKE=true vitest run tests/live.test.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:check": "node --import tsx scripts/check-db.ts",
+    "db:migrate": "node --import tsx src/db/migrate.ts",
+    "db:seed": "node --import tsx src/db/seed.ts",
+    "db:verify": "node --import tsx scripts/verify-db.ts",
+    "demo:mcp": "tsx scripts/mcp-client.ts",
+    "verify:deployment": "tsx scripts/verify-deployment.ts",
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build"
+  },
+  "dependencies": {
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
+    "@modelcontextprotocol/server": "^2.3.1",
+    "@modelcontextprotocol/node": "^2.1.1",
+    "drizzle-orm": "^0.44.7",
+    "fastify": "^5.6.1",
+    "openai": "^6.0.0",
+    "postgres": "^3.4.7",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@modelcontextprotocol/client": "^2.3.1",
+    "@types/node": "^24.0.0",
+    "drizzle-kit": "^0.31.5",
+    "eslint": "^9.39.0",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.67.0",
+    "vitest": "^2.1.9"
+  }
+}

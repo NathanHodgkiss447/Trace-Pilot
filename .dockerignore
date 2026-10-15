@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.local-git
+.env
+.env.*
+*.pem
+*.cer
+*.crt
+*.key
+coverage
+tests
+docs

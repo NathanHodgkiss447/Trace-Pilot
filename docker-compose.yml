@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: tracepilot
+      POSTGRES_USER: tracepilot
+      POSTGRES_PASSWORD: local-development-only
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - tracepilot-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracepilot -d tracepilot"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+volumes:
+  tracepilot-db:
