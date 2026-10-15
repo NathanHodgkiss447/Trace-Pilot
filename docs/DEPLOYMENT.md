@@ -18,6 +18,8 @@ Confirm that `@modelcontextprotocol/server`, `@modelcontextprotocol/node` and `@
 
 Commit `package-lock.json` with the source. Docker and CI use `npm ci` so deployment and automated checks install the recorded dependency versions.
 
+The Docker build stage explicitly uses `npm ci --include=dev` to install TypeScript even when the host configures production mode. After compilation it prunes development dependencies. The lockfile must use registry archives rather than links into another local project; automated regression tests check this, and CI also builds the deployment image.
+
 ## 2. Supabase
 
 1. Visit https://supabase.com/dashboard.
