@@ -12,6 +12,16 @@ interface LockedPackage {
 const lock = JSON.parse(readFileSync('package-lock.json', 'utf8')) as { packages: Record<string, LockedPackage> };
 
 describe('portable deployment dependencies', () => {
+  it('records complete registry metadata for every installed package, including optional platform binaries', () => {
+    for (const [path, entry] of Object.entries(lock.packages)) {
+      if (!path) continue;
+      expect(entry, path).toMatchObject({
+        version: expect.stringMatching(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/),
+        resolved: expect.stringMatching(/^https:\/\/registry\.npmjs\.org\/.+\.tgz$/),
+        integrity: expect.stringMatching(/^sha512-/),
+      });
+    }
+  });
   it('does not depend on local testing links or directories outside the repository', () => {
     const nonPortable = Object.entries(lock.packages).filter(([path, entry]) =>
       entry.link || path.startsWith('../') || path.startsWith('/') ||

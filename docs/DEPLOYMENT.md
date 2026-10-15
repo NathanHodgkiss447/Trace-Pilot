@@ -22,6 +22,8 @@ The Docker build stage explicitly uses `npm ci --include=dev --bin-links=true` t
 
 If Railway reports `tsc: not found`, inspect the complete dependency installation log as well as the compilation error. A successful local build does not establish the cause of a remote failure. With the compiler check above, a missing TypeScript package fails during dependency installation; compilation no longer relies on its executable link.
 
+If `npm ci` reports `Invalid Version:`, inspect every non-root lockfile entry for a missing version. The previous lockfile contained 23 incomplete optional Rollup platform records with only `dev` and `optional` flags. The repaired lockfile supplies registry versions, archive URLs, integrity checksums and platform constraints. A regression test checks all package records, including optional binaries. The original failure was reproduced with npm 11.19.1 before repairing the lockfile.
+
 ## 2. Supabase
 
 1. Visit https://supabase.com/dashboard.
