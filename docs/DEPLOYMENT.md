@@ -18,7 +18,9 @@ Confirm that `@modelcontextprotocol/server`, `@modelcontextprotocol/node` and `@
 
 Commit `package-lock.json` with the source. Docker and CI use `npm ci` so deployment and automated checks install the recorded dependency versions.
 
-The Docker build stage explicitly uses `npm ci --include=dev` to install TypeScript even when the host configures production mode. After compilation it prunes development dependencies. The lockfile must use registry archives rather than links into another local project; automated regression tests check this, and CI also builds the deployment image.
+The Docker build stage explicitly uses `npm ci --include=dev --bin-links=true` to install TypeScript even when the host configures production mode, then checks the compiler before caching the dependency layer. The build invokes the installed compiler through Node directly so it does not depend on the `node_modules/.bin/tsc` link or shell PATH. After compilation it prunes development dependencies. The lockfile must use registry archives rather than links into another local project; automated regression tests check this, and CI also builds the deployment image.
+
+If Railway reports `tsc: not found`, inspect the complete dependency installation log as well as the compilation error. A successful local build does not establish the cause of a remote failure. With the compiler check above, a missing TypeScript package fails during dependency installation; compilation no longer relies on its executable link.
 
 ## 2. Supabase
 

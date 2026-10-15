@@ -1,7 +1,8 @@
 FROM node:24-bookworm-slim AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --include=dev
+RUN npm ci --include=dev --bin-links=true \
+    && node ./node_modules/typescript/bin/tsc --version
 COPY tsconfig*.json ./
 COPY src ./src
 RUN npm run build && npm prune --omit=dev
